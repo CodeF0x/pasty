@@ -13,19 +13,19 @@ pasty is a cli for pastebin.com. With it you can:
 
 first, login:
 
-```shell
+```
 $ pasty login <username>
 ```
 
 then, create a paste:
 
-```shell
-$ pasty create -s "hello world!"
+```
+$ pasty create -s 'hello world!'
 ```
 
 alternativly, you can upload a file:
 
-```shell
+```
 $ pasty create -f hello_world.txt
 ```
 
@@ -33,7 +33,7 @@ $ pasty create -f hello_world.txt
 
 list all your pastes:
 
-```shell
+```
 $ pasty list
 ```
 
@@ -45,23 +45,29 @@ $ pasty delete <unique id>
 
 get a paste's content:
 
-```shell
+```
 $ pasty get <unique id>
 ```
 
 get info about signed in user:
 
-```shell
+```
 $ pasty user-info
+```
+
+logout:
+
+```
+$ pasty logout
 ```
 
 # more options
 
 you can customize your newly created paste:
 
-- syntax highlighting (default: none)
+- syntax highlighting (default: text)
   - [supported hightlighting formats](https://pastebin.com/faq#10)
-- expiry date (default: none)
+- expiry date (default: never)
   - never (N)
   - 10 minutes (10M)
   - 1 hour (1H)

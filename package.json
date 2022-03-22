@@ -1,0 +1,35 @@
+{
+  "name": "pasty",
+  "version": "1.0.0",
+  "description": "a cli for pastebin.com",
+  "main": "lib/main.js",
+  "type": "module",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeF0x/pasty.git"
+  },
+  "keywords": [
+    "cli",
+    "pastebin",
+    "pastebin.com"
+  ],
+  "author": "Tobias \"CodeF0x\" Oettl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CodeF0x/pasty/issues"
+  },
+  "homepage": "https://github.com/CodeF0x/pasty#readme",
+  "dependencies": {
+    "inquirer": "^8.2.1",
+    "jsdom": "^19.0.0",
+    "node-fetch": "^3.2.3",
+    "table": "^6.8.0",
+    "yargs": "^17.4.0"
+  }
+}
