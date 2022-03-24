@@ -108,3 +108,4 @@ dist
 
 # other stuff
 .pasty.json
+.test
