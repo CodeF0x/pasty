@@ -1,12 +1,12 @@
-import { TABLE_HEADERS } from '../lib/constant';
-import {
+const { TABLE_HEADERS } = require('../lib/constant');
+const {
   convertToDate,
   getListTable,
   mapToVisibilityString,
   mapToVisiblityCode,
   tokenGuard,
-} from '../lib/util';
-import { getXml } from './helper/test-helper';
+} = require('../lib/util');
+const { getXml } = require('./helper/test-helper');
 
 describe('mapToVisibilityString', () => {
   const fixtures = [

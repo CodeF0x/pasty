@@ -1,4 +1,4 @@
-export function getXml(
+function getXml(
   pasteKey,
   pasteName,
   pasteVisibility,
@@ -17,6 +17,10 @@ export function getXml(
             <paste_format_short>${pasteFormat}</paste_format_short>
             <paste_url>https://pastebin.com/${pasteKey}</paste_url>
             <paste_hits>15</paste_hits>
-</paste>
+        </paste>
         `;
 }
+
+module.exports = {
+  getXml,
+};
