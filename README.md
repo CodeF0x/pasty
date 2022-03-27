@@ -13,6 +13,13 @@ pasty is a cli for pastebin.com. With it you can:
 
 first, login:
 
+- visit [pastebin.com](https://pastebin.com/) and login
+- visit [https://pastebin.com/doc_api#1](https://pastebin.com/api_doc)
+- save your api key in a file called `pasty.api` in your home directory (`~/.pasty.api`)
+  - the contents of your `.pasty.api` should just be the key, nothing else
+
+then run
+
 ```
 $ pasty login <username>
 ```
@@ -52,7 +59,7 @@ $ pasty get <unique id>
 get info about signed in user:
 
 ```
-$ pasty user-info
+$ pasty user
 ```
 
 logout:
