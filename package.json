@@ -6,6 +6,13 @@
   "directories": {
     "lib": "lib"
   },
+  "bin": {
+    "pasty": "bin/main.js"
+  },
+  "files": [
+    "lib/",
+    "bin/"
+  ],
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose --watch"
   },

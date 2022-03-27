@@ -123,7 +123,7 @@ describe('apiFunctions', () => {
       __setResponseText(responseText);
 
       const apiRes = await createPaste(
-        { format: 'text' },
+        { format: 'text', string: 'string' },
         'api token',
         'user token'
       );
@@ -159,7 +159,7 @@ describe('apiFunctions', () => {
       __setStatusCode(500);
 
       const apiRes = await createPaste(
-        { format: 'text' },
+        { format: 'text', string: 'string' },
         'api token',
         'user token'
       );
@@ -167,16 +167,30 @@ describe('apiFunctions', () => {
       expect(apiRes).toBe(`Error! ${responseText}`);
     });
 
-    it('should return error if fomit is not supported by pastebin', async () => {
+    it('should return error if format is not supported by pastebin', async () => {
+      const resonseText =
+        'Error! Format option is not supported by pastebin. See https://pastebin.com/doc_api#8 for supported formats';
+
       const apiRes = await createPaste(
-        { format: 'does not exist' },
+        { format: 'does not exist', string: 'string' },
         'api token',
         'user token'
       );
 
-      expect(apiRes).toBe(
-        'Error! Format option is not supported by pastebin. See https://pastebin.com/doc_api#8 for supported formats'
+      expect(apiRes).toBe(resonseText);
+    });
+
+    it('should return error if neither file or string are supplied', async () => {
+      const responseText =
+        'You need to supply either -f (--file) OR -s (--string)';
+
+      const apiRes = await createPaste(
+        { format: 'text' },
+        'api token',
+        'user token'
       );
+
+      expect(apiRes).toBe(responseText);
     });
   });
 

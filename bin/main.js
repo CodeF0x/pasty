@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const yargs = require('yargs');
 const { hideBin } = require('yargs/helpers');
 const { readFileSync } = require('fs');
@@ -8,7 +10,7 @@ const {
   listPastes,
   loginUser,
   logout,
-} = require('./api-functions.js');
+} = require('../lib/api-functions.js');
 
 let userToken;
 let apiToken;
