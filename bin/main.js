@@ -78,36 +78,44 @@ yargs(hideBin(process.argv))
         .option('f', {
           alias: 'file',
           describe: 'the path to the file (relative) [REQUIRED OR -s]',
+          requiresArg: true,
         })
         .option('s', {
           alias: 'string',
           describe: 'the string you want to paste [REQUIRED OR -f]',
+          requiresArg: true,
         })
         .option('n', {
           alias: 'name',
           describe: 'the name of your paste',
           default: 'Untitled',
+          requiresArg: true,
         })
         .option('form', {
           alias: 'format',
           describe: 'syntax highlighting of your paste',
           default: 'text',
+          requiresArg: true,
         })
         .option('v', {
           alias: 'visibility',
           describe: 'whether your paste should be public, private or unlisted',
           default: 'unlisted',
           choices: ['unlisted', 'private', 'public'],
+          requiresArg: true,
         })
         .option('e', {
           alias: 'expiry',
           describe: 'when your paste should expire',
           default: 'N',
           choices: ['N', '10M', '1H', '1D', '1W', '2W', '1M', '6M', '1Y'],
+          requiresArg: true,
         })
         .option('fol', {
           alias: 'folder',
           describe: 'the folder of your paste',
+          default: '',
+          requiresArg: true,
         })
         .conflicts('f', 's');
     },

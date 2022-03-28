@@ -43,11 +43,11 @@ describe('apiFunctions', () => {
     );
 
     it('should return table of pastes', async () => {
-      const apiRes = await listPastes(1, 'paste key', 'paste name');
+      const actualResponse = await listPastes(1, 'paste key', 'paste name');
 
       // this sucks, but hardcoding the expected table as a string
       // is even worse because of newlines, etc.
-      expect(apiRes).toBe(
+      expect(actualResponse).toBe(
         table([
           [...TABLE_HEADERS],
           ['paste key', 'paste name', 'public', 'Never', 'text'], // values set in node-fetch.js mock
@@ -59,9 +59,9 @@ describe('apiFunctions', () => {
       __setStatusCode(500);
       __setResponseText('API Error');
 
-      const apiRes = await listPastes(1, 'testi', 'testo');
+      const actualResponse = await listPastes(1, 'testi', 'testo');
 
-      expect(apiRes).toBe('Error! API Error');
+      expect(actualResponse).toBe('Error! API Error');
     });
   });
 
@@ -81,13 +81,17 @@ describe('apiFunctions', () => {
     );
 
     it('should return successfull response if paste was deleted', async () => {
-      const responseText = 'Paste removed';
+      const expectedResponse = 'Paste removed';
 
-      __setResponseText(responseText);
+      __setResponseText(expectedResponse);
 
-      const apiRes = await deletePaste('paste key', 'api token', 'user token');
+      const actualResponse = await deletePaste(
+        'paste key',
+        'api token',
+        'user token'
+      );
 
-      expect(apiRes).toBe(`Success! ${responseText}`);
+      expect(actualResponse).toBe(`Success! ${expectedResponse}`);
     });
 
     it('should return error if api returns error', async () => {
@@ -96,9 +100,13 @@ describe('apiFunctions', () => {
       __setResponseText(resonseText);
       __setStatusCode(403);
 
-      const apiRes = await deletePaste('pastey key', 'api token', 'user token');
+      const actualResponse = await deletePaste(
+        'pastey key',
+        'api token',
+        'user token'
+      );
 
-      expect(apiRes).toBe(`Error! ${resonseText}`);
+      expect(actualResponse).toBe(`Error! ${resonseText}`);
     });
   });
 
@@ -118,28 +126,29 @@ describe('apiFunctions', () => {
     );
 
     it('should create paste and return paste url', async () => {
-      const responseText = 'https://pastebin.com/12345678';
+      const expectedResponse = 'https://pastebin.com/12345678';
 
-      __setResponseText(responseText);
+      __setResponseText(expectedResponse);
 
-      const apiRes = await createPaste(
-        { format: 'text', string: 'string' },
+      const actualResponse = await createPaste(
+        { format: 'text', string: 'string', folder: '' },
         'api token',
         'user token'
       );
 
-      expect(apiRes).toBe(`Success! ${responseText}`);
+      expect(actualResponse).toBe(`Success! ${expectedResponse}`);
     });
 
     it('should create paste from file', async () => {
-      const responseText = 'https://pastebin.com/12345678';
+      const expectedResponse = 'https://pastebin.com/12345678';
 
-      __setResponseText(responseText);
+      __setResponseText(expectedResponse);
 
-      const apiRes = await createPaste(
+      const actualResponse = await createPaste(
         {
           format: 'text',
           file: '/some/path/to/file',
+          folder: '',
         },
         'api token',
         'user token'
@@ -149,69 +158,82 @@ describe('apiFunctions', () => {
         '/some/path/to/file',
         'utf-8'
       );
-      expect(apiRes).toBe(`Success! ${responseText}`);
+      expect(actualResponse).toBe(`Success! ${expectedResponse}`);
     });
 
     it('should return error if api returns error', async () => {
-      const responseText = 'Ran out of storage';
+      const expectedResponse = 'Ran out of storage';
 
-      __setResponseText(responseText);
+      __setResponseText(expectedResponse);
       __setStatusCode(500);
 
-      const apiRes = await createPaste(
-        { format: 'text', string: 'string' },
+      const actualResponse = await createPaste(
+        { format: 'text', string: 'string', folder: '' },
         'api token',
         'user token'
       );
 
-      expect(apiRes).toBe(`Error! ${responseText}`);
+      expect(actualResponse).toBe(`Error! ${expectedResponse}`);
     });
 
     it('should return error if format is not supported by pastebin', async () => {
       const resonseText =
         'Error! Format option is not supported by pastebin. See https://pastebin.com/doc_api#8 for supported formats';
 
-      const apiRes = await createPaste(
-        { format: 'does not exist', string: 'string' },
+      const actualResponse = await createPaste(
+        { format: 'does not exist', string: 'string', folder: '' },
         'api token',
         'user token'
       );
 
-      expect(apiRes).toBe(resonseText);
+      expect(actualResponse).toBe(resonseText);
+    });
+
+    it('should return error if folder name is longer than 8 characters', async () => {
+      const expectedResponse =
+        'Pastebin only allows up to 8 characters for a folder name.';
+
+      const actualResponse = await createPaste(
+        { format: 'text', string: 'string', folder: 'longerthan8characters' },
+        'api token',
+        'user token'
+      );
+
+      expect(actualResponse).toBe(`Error! ${expectedResponse}`);
     });
 
     it('should return error if neither file or string are supplied', async () => {
-      const responseText =
+      const expectedResponse =
         'You need to supply either -f (--file) OR -s (--string)';
 
-      const apiRes = await createPaste(
+      const actualResponse = await createPaste(
         { format: 'text' },
         'api token',
         'user token'
       );
 
-      expect(apiRes).toBe(responseText);
+      expect(actualResponse).toBe(expectedResponse);
     });
   });
 
   describe('logOut', () => {
     it('should delete the ~/.pasty.user file', () => {
-      const responseText = 'Successfully logged you out.';
+      const expectedResponse = 'Successfully logged you out.';
 
-      const apiRes = logout();
+      const actualResponse = logout();
 
-      expect(apiRes).toBe(responseText);
+      expect(actualResponse).toBe(expectedResponse);
       expect(fs.rmSync).toHaveBeenCalledWith('mockHomeDir/.pasty.user');
     });
 
     it('should return error if there is no ~/.pasty.user file', () => {
-      const responseText =
+      const expectedResponse =
         "You're currently not logged in (could not find ~/.pasty.user)";
 
       fs.__setFileExists(false);
-      const apiRes = logout();
+      const actualResponse = logout();
 
-      expect(apiRes).toBe(responseText);
+      expect(actualResponse).toBe(expectedResponse);
       expect(fs.rmSync).not.toHaveBeenCalled();
     });
   });
@@ -227,29 +249,29 @@ describe('apiFunctions', () => {
     it('should write user token to file if login was successfull', async () => {
       const username = 'dummyUser';
       const tokenFromApi = 'token from api';
-      const responseText = `You're now logged in as ${username}`;
+      const expectedResponse = `You're now logged in as ${username}`;
 
       __setResponseText(tokenFromApi);
 
-      const apiRes = await loginUser({ username }, 'api token');
+      const actualResponse = await loginUser({ username }, 'api token');
 
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         'mockHomeDir/.pasty.user',
         tokenFromApi,
         'utf-8'
       );
-      expect(apiRes).toBe(`Success! ${responseText}`);
+      expect(actualResponse).toBe(`Success! ${expectedResponse}`);
     });
 
     it('should return error if api returns error', async () => {
-      const responseText = 'Login service unavailable';
+      const expectedResponse = 'Login service unavailable';
 
-      __setResponseText(responseText);
+      __setResponseText(expectedResponse);
       __setStatusCode(500);
 
-      const apiRes = await loginUser({}, 'api token');
+      const actualResponse = await loginUser({}, 'api token');
 
-      expect(apiRes).toBe(`Error! ${responseText}`);
+      expect(actualResponse).toBe(`Error! ${expectedResponse}`);
     });
   });
 });
