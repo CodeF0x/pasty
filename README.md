@@ -88,6 +88,8 @@ you can customize your newly created paste:
   - unlisted
   - private
 
+> folders are not supported! This is due to the pasting API not processing the folder option when making the request. It can't be fixed within this repository
+
 # installation
 
-download the latest built executable for your system and add it to your PATH variable.
+`npm install -g pasty`

@@ -113,9 +113,11 @@ yargs(hideBin(process.argv))
         })
         .option('fol', {
           alias: 'folder',
-          describe: 'the folder of your paste',
+          describe:
+            "the folder of your paste (not working due to pastebin's api)",
           default: '',
           requiresArg: true,
+          deprecated: true,
         })
         .conflicts('f', 's');
     },
