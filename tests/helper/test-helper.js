@@ -1,4 +1,4 @@
-function getXml(
+function getPasteListXml(
   pasteKey,
   pasteName,
   pasteVisibility,
@@ -21,6 +21,23 @@ function getXml(
         `;
 }
 
+function getUserXml(userName, privacy, email, premium) {
+  return `
+    <user>
+        <user_name>${userName}</user_name>
+        <user_format_short>text</user_format_short>
+        <user_expiration>N</user_expiration>
+        <user_avatar_url>https://pastebin.com/cache/a/1.jpg</user_avatar_url>
+        <user_private>${privacy}</user_private>
+        <user_website>https://myawesomesite.com</user_website>
+        <user_email>${email}</user_email>
+        <user_location>New York</user_location>
+        <user_account_type>${premium}</user_account_type>
+</user>
+  `;
+}
+
 module.exports = {
-  getXml,
+  getPasteListXml,
+  getUserXml,
 };

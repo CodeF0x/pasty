@@ -1,17 +1,19 @@
-const { getXml } = require('./../helper/test-helper');
+const { getPasteListXml, getUserXml } = require('./../helper/test-helper');
 
 let fetch;
 
 let statusCode = 200;
 let responseText;
 
-function mockFetch(url) {
+function mockFetch(url, options) {
   return Promise.resolve({
     status: statusCode,
     text: () =>
       responseText
         ? responseText
-        : getXml('paste key', 'paste name', '0', '0', 'text'),
+        : options.body.includes('api_option=list')
+        ? getPasteListXml('paste key', 'paste name', '0', '0', 'text')
+        : getUserXml('test user', '2', 'test.user@example.com', '0'),
   });
 }
 

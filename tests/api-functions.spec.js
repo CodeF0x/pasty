@@ -8,8 +8,9 @@ const {
   createPaste,
   logout,
   loginUser,
+  getUserInfo,
 } = require('../lib/api-functions');
-const { TABLE_HEADERS } = require('../lib/constant');
+const { LIST_TABLE_HEADERS, USER_TABLE_HEADERS } = require('../lib/constant');
 const { table } = require('table');
 const { __setStatusCode, __setResponseText } = require('node-fetch');
 const fs = require('fs');
@@ -49,7 +50,7 @@ describe('apiFunctions', () => {
       // is even worse because of newlines, etc.
       expect(actualResponse).toBe(
         table([
-          [...TABLE_HEADERS],
+          [...LIST_TABLE_HEADERS],
           ['paste key', 'paste name', 'public', 'Never', 'text'], // values set in node-fetch.js mock
         ])
       );
@@ -273,5 +274,44 @@ describe('apiFunctions', () => {
 
       expect(actualResponse).toBe(`Error! ${expectedResponse}`);
     });
+  });
+});
+
+describe('getUserInfo', () => {
+  testTokenGuard(
+    true,
+    getUserInfo,
+    [undefined, 'user token'],
+    'Please provide your pastebin.com API token in the ~/.pasty.api file.'
+  );
+
+  testTokenGuard(
+    false,
+    getUserInfo,
+    ['api token', undefined],
+    'Please login first via pasty login <username>'
+  );
+
+  it('should return table with correct data', async () => {
+    __setResponseText(undefined);
+    __setStatusCode(200);
+
+    const actualResponse = await getUserInfo('token', 'another token');
+
+    expect(actualResponse).toBe(
+      table([
+        [...USER_TABLE_HEADERS],
+        ['test user', 'private', 'test.user@example.com', 'free'], // actual values set in node-fetch.mock
+      ])
+    );
+  });
+
+  it('should return error if api returns error', async () => {
+    __setResponseText('Wrong api key');
+    __setStatusCode(304);
+
+    const actualResponse = await getUserInfo('token', 'another token');
+
+    expect(actualResponse).toBe('Error! Wrong api key');
   });
 });

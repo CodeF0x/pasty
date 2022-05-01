@@ -10,6 +10,7 @@ const {
   listPastes,
   loginUser,
   logout,
+  getUserInfo,
 } = require('../lib/api-functions.js');
 
 let userToken;
@@ -133,6 +134,14 @@ yargs(hideBin(process.argv))
     async () => {
       const response = await logout();
       console.log(response);
+    }
+  )
+  .command(
+    'user',
+    'shows info about currently logged in user',
+    () => {},
+    async () => {
+      console.log(await getUserInfo(apiToken, userToken));
     }
   )
   .demandCommand(1)

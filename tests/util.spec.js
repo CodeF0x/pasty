@@ -1,12 +1,15 @@
-const { TABLE_HEADERS } = require('../lib/constant');
+const { LIST_TABLE_HEADERS, USER_TABLE_HEADERS } = require('../lib/constant');
 const {
   convertToDate,
   getListTable,
   mapToVisibilityString,
   mapToVisiblityCode,
   tokenGuard,
+  mapAccountPremium,
+  mapAccountVisibility,
+  getUserData,
 } = require('../lib/util');
-const { getXml } = require('./helper/test-helper');
+const { getPasteListXml, getUserXml } = require('./helper/test-helper');
 
 describe('mapToVisibilityString', () => {
   const fixtures = [
@@ -86,7 +89,7 @@ describe('getListTable', () => {
     const pasteExpiryDate = '0';
     const pasteFormat = 'text';
 
-    const xml = getXml(
+    const xml = getPasteListXml(
       pasteKey,
       pasteName,
       pasteVisibility,
@@ -95,7 +98,7 @@ describe('getListTable', () => {
     );
 
     expect(getListTable(xml)).toEqual([
-      [...TABLE_HEADERS],
+      [...LIST_TABLE_HEADERS],
       [pasteKey, pasteName, 'unlisted', 'Never', pasteFormat],
     ]);
   });
@@ -113,14 +116,14 @@ describe('getListTable', () => {
     const pasteExpiryDate2 = '1640992515';
     const pasteFormat2 = 'javascript';
 
-    const xml = `${getXml(
+    const xml = `${getPasteListXml(
       pasteKey,
       pasteName,
       pasteVisibility,
       pasteExpiryDate,
       pasteFormat
     )}
-    ${getXml(
+    ${getPasteListXml(
       pasteKey2,
       pasteName2,
       pasteVisibility2,
@@ -129,9 +132,53 @@ describe('getListTable', () => {
     )}`;
 
     expect(getListTable(xml)).toEqual([
-      [...TABLE_HEADERS],
+      [...LIST_TABLE_HEADERS],
       [pasteKey, pasteName, 'unlisted', 'Never', pasteFormat],
       [pasteKey2, pasteName2, 'public', '01.01.2022 00:15', pasteFormat2],
+    ]);
+  });
+});
+
+describe('mapAccountPremium', () => {
+  it('should return free for 0', () => {
+    expect(mapAccountPremium(0)).toBe('free');
+  });
+
+  it('should return premium for 1', () => {
+    expect(mapAccountPremium(1)).toBe('premium');
+  });
+});
+
+describe('mapAccountVisibility', () => {
+  it('should return public for 0', () => {
+    expect(mapAccountVisibility(0)).toBe('public');
+  });
+
+  it('should return unlisted for 1', () => {
+    expect(mapAccountVisibility(1)).toBe('unlisted');
+  });
+
+  it('should return private for 2', () => {
+    expect(mapAccountVisibility(2)).toBe('private');
+  });
+
+  it('should return error for something else', () => {
+    expect(mapAccountVisibility(3)).toBe('error, could not get from api');
+  });
+});
+
+describe('getUserData', () => {
+  it('should return table with mapped data', () => {
+    const userName = 'test user';
+    const privacy = '0';
+    const email = 'test.user@example.com';
+    const premium = '1';
+
+    const xml = getUserXml(userName, privacy, email, premium);
+
+    expect(getUserData(xml)).toEqual([
+      [...USER_TABLE_HEADERS],
+      [userName, 'public', email, 'premium'],
     ]);
   });
 });
