@@ -30,7 +30,7 @@ then, create a paste:
 $ pasty create -s 'hello world!'
 ```
 
-alternativly, you can upload a file:
+alternatively, you can upload a file:
 
 ```
 $ pasty create -f hello_world.txt
@@ -88,7 +88,7 @@ you can customize your newly created paste:
   - unlisted
   - private
 
-> folders are not supported! This is due to the pasting API not processing the folder option when making the request. It can't be fixed within this repository
+> folders are not supported! This is due to the pastebin API not processing the folder option when making the request. It can't be fixed within this repository
 
 # installation
 
