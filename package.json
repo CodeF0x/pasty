@@ -31,10 +31,12 @@
     "url": "https://github.com/CodeF0x/pasty/issues"
   },
   "homepage": "https://github.com/CodeF0x/pasty#readme",
+  "type": "module",
   "dependencies": {
     "inquirer": "^8.2.1",
     "jsdom": "^19.0.0",
     "node-fetch": "^2.6.7",
+    "open": "^9.1.0",
     "table": "^6.8.0",
     "yargs": "^17.4.0"
   },
