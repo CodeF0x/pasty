@@ -14,7 +14,7 @@ pasty is a cli for pastebin.com. With it you can:
 first, login:
 
 - visit [pastebin.com](https://pastebin.com/) and login
-- visit [https://pastebin.com/doc_api#1](https://pastebin.com/api_doc)
+- visit [https://pastebin.com/doc_api](https://pastebin.com/doc_api)
 - save your api key in a file called `pasty.api` in your home directory (`~/.pasty.api`)
   - the contents of your `.pasty.api` should just be the key, nothing else
 
