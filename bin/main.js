@@ -1,17 +1,18 @@
 #!/usr/bin/env node
 
-const yargs = require('yargs');
-const { hideBin } = require('yargs/helpers');
-const { readFileSync } = require('fs');
-const { homedir } = require('os');
-const {
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+import { readFileSync }from 'fs';
+import { homedir } from 'os';
+import {
   createPaste,
   deletePaste,
   listPastes,
   loginUser,
   logout,
   getUserInfo,
-} = require('../lib/api-functions.js');
+} from '../lib/api-functions.js';
+import { openInBrowser } from '../lib/util.js';
 
 let userToken;
 let apiToken;
@@ -142,6 +143,18 @@ yargs(hideBin(process.argv))
     () => {},
     async () => {
       console.log(await getUserInfo(apiToken, userToken));
+    }
+  )
+  .command(
+    'show <paste id>',
+    'opens specified paste in your default browser',
+    (yargs) => {
+      return yargs.positional('pasteid', {
+        describe: 'id of the paste you want to open in browser'
+      });
+    },
+    async (argv) => {
+      await openInBrowser(argv.pasteid);
     }
   )
   .demandCommand(1)
